@@ -1,0 +1,42 @@
+{
+  "name": "expresspractice",
+  "version": "1.0.0",
+  "description": "express practice",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "node1": "nodemon ik1.js",
+    "node2": "nodemon ik2.js",
+    "node3": "nodemon ik3.js",
+    "node4": "nodemon ik4.js",
+    "node5": "nodemon ik5.js",
+    "node6": "nodemon ik6.js",
+    "node7": "nodemon ik7.js",
+    "node8": "nodemon ik8.js",
+    "node9": "nodemon ik9.js",
+    "node10": "nodemon ik10.js",
+    "node11": "nodemon ik11.js",
+    "node12": "nodemon ik12.js",
+    "node13": "nodemon ik13.js",
+    "node14": "nodemon ik14.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "mongoose": "^5.13.3",
+    "morgan": "^1.10.0",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
+    "pug": "^3.0.2",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
+}
