@@ -1,6 +1,6 @@
 const iKexpress = require('express')
 const iKmorgan = require('morgan')
-const iKpassport = require('passport')
+// const iKpassport = require('passport')
 
 
 const iKapp = iKexpress()
@@ -8,27 +8,65 @@ iKapp.use( iKmorgan('dev') )
 iKapp.use( iKexpress.urlencoded({extended: true}) )
 require('./database.js')()
 
+const iKuserDb = require('./model.js')
+const {iKcreateJwt, iKauthenticateRoute} = require('./iKmiddleware.js')
+const iKbcrypt = require('bcrypt')
+
+
+
 iKapp.get('/', (req, res) => {
     res.send('iK home page1')
 })
+
 
 iKapp.get('/api/signup', (req, res) => {
     res.send('iK signup page')
 })
 
+
 iKapp.post('/api/signup', (req, res) => {
-    res.send( req.body )
+    const iKuser = iKuserDb({
+        iKemail: req.body.email,
+        iKpassword: req.body.password
+    })
+
+    iKuser.save()
+        .then(iKuserData => {
+            const iKtoken = iKcreateJwt( iKuserData.id )
+            res.json( {iKuserData, iKjwt: iKtoken} )
+        })
 })
+
 
 iKapp.get('/api/login', (req, res) => {
     res.send('iK login page')
 })
 
+
 iKapp.post('/api/login', (req, res) => {
-    res.send( req.body )
+    const iKuserEmail = req.body.email
+    const iKuserPassword = req.body.password
+
+    iKuserDb.findOne({ iKemail: iKuserEmail })
+        .then(iKuserData => {
+            // console.log(iKuserData)
+            if (iKuserData === null) res.send('iKcannot find email');
+
+            iKbcrypt.compare(iKuserPassword, iKuserData.iKpassword).then(async function(result) {
+                if (!result) return res.send('iK password not matching');
+                
+                const iKtoken = iKcreateJwt( iKuserData.id )
+                res.json( {iKuserData, iKjwt: iKtoken} )
+            });
+        })
 })
 
-iKapp.get('/api/authpage', (req, res) => {
+
+iKapp.get('/api/logout', iKauthenticateRoute, (req, res) => {
+    res.send('iK logout page')
+})
+
+iKapp.get('/api/authpage', iKauthenticateRoute, (req, res) => {
     res.send('iK auth page')
 })
 
