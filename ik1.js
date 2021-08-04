@@ -12,15 +12,23 @@ iKapp.get('/', (req, res) => {
     res.send('iK home page1')
 })
 
-iKapp.get('/login', (req, res) => {
-    res.send('iK login page')
+iKapp.get('/api/signup', (req, res) => {
+    res.send('iK signup page')
 })
 
-iKapp.post('/login', (req, res) => {
+iKapp.post('/api/signup', (req, res) => {
     res.send( req.body )
 })
 
-iKapp.get('/auth', (req, res) => {
+iKapp.get('/api/login', (req, res) => {
+    res.send('iK login page')
+})
+
+iKapp.post('/api/login', (req, res) => {
+    res.send( req.body )
+})
+
+iKapp.get('/api/authpage', (req, res) => {
     res.send('iK auth page')
 })
 
