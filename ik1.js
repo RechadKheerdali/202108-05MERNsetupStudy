@@ -1,6 +1,8 @@
 const iKexpress = require('express')
 const iKmorgan = require('morgan')
 // const iKpassport = require('passport')
+const iKcors = require('cors')
+
 
 require('dotenv').config()
 
@@ -9,6 +11,16 @@ iKapp.use( iKmorgan('dev') )
 iKapp.use( iKexpress.urlencoded({extended: true}) )
 require('./database.js')()
 
+
+//whtielist
+const iKcorsOptions = {
+    origin: 'http://localhost:9000'
+    // optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  }
+iKapp.use( iKcors(iKcorsOptions) )
+
+
+//routes
 iKapp.get('/', (req, res) => {
     res.send('iK home page1')
 })
