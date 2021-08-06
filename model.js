@@ -1,4 +1,6 @@
 const iKmongoose = require('mongoose')
+const iKbcrypt = require('bcrypt')
+
 
 const iKschema = new iKmongoose.Schema({
     iKemail: {
@@ -13,8 +15,15 @@ const iKschema = new iKmongoose.Schema({
 }, { timestamps: true })
 
 iKschema.pre('save', async function (next) {   
-    
-    console.log( this ) 
+    // console.log( this ) 
+
+    await iKbcrypt.hash(this.iKpassword, 10).then((hash) => {
+        // Store hash in your password DB.
+        this.iKpassword = hash;
+        next()
+    });
+
+    // return next()
 })
 
 //create the database model

@@ -34,11 +34,18 @@ iKapp.get('/api/signup', (req, res) => {
 })
 
 
-iKapp.post('/api/signup', (req, res) => {
+iKapp.post('/api/signup', async (req, res) => {
     const email = req.body.email
     const password = req.body.password
 
-    res.send( req.body )
+    //save new user onto db
+    await iKuserDb({iKemail: email, iKpassword: password}).save()
+        .then(iKuser => {
+            console.log(iKuser)
+            return res.json( iKuser )
+        })
+
+    // res.send( 'iK error occured in saving new user' )
 })
 
 
