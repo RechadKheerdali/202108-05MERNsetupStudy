@@ -13,6 +13,7 @@ const iKschema = new iKmongoose.Schema({
 }, { timestamps: true })
 
 iKschema.pre('save', async function (next) {   
+    
     console.log( this ) 
 })
 

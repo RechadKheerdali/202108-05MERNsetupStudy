@@ -3,6 +3,9 @@ const iKmorgan = require('morgan')
 // const iKpassport = require('passport')
 const iKcors = require('cors')
 
+const iKuserDb = require('./model.js')
+
+
 
 require('dotenv').config()
 
@@ -32,6 +35,9 @@ iKapp.get('/api/signup', (req, res) => {
 
 
 iKapp.post('/api/signup', (req, res) => {
+    const email = req.body.email
+    const password = req.body.password
+
     res.send( req.body )
 })
 
