@@ -3,7 +3,7 @@ const iKmongoose = require('mongoose')
 const iKconnectToMdb = async () => {
     try {
         const iKconnectWithMongoose = await iKmongoose.connect(
-            process.env.MONGODBURI,
+            process.env.IKMONGODBURI,
             {
                 useNewUrlParser: true,
                 useUnifiedTopology: true,

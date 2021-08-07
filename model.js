@@ -22,8 +22,6 @@ iKschema.pre('save', async function (next) {
         this.iKpassword = hash;
         next()
     });
-
-    // return next()
 })
 
 //create the database model
