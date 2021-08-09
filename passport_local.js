@@ -1,4 +1,5 @@
 const LocalStrategy = require('passport-local').Strategy;
+const iKpassport = require('passport')
 
 const iKuserDb = require('./model.js')
 
@@ -18,3 +19,18 @@ exports.iKpassportLocal = new LocalStrategy(
         });
     }
 );
+
+// exports.iKpassportSerializeUser = iKpassportP => {
+//     iKpassport.serializeUser(function(user, done) {
+//         done(null, user.id);
+//     })
+// };
+
+
+// exports.iKpassportDeserailizeUser = iKpassportP => {
+//     iKpassport.deserializeUser(function(id, done) {
+//         iKuserDb.findById(id, function(err, user) {
+//             return done(err, user);
+//         })
+//     })
+// };

@@ -7,10 +7,11 @@
 const iKexpress = require('express')
 const iKmorgan = require('morgan')
 const iKcors = require('cors')
+const iKsession = require('express-session')
 
 const iKpassport = require('passport')
-const {iKpassportJwt} = require('./passport_jwt.js')
-const {iKpassportLocal} = require('./passport_local.js')
+// const {iKpassportJwt} = require('./passport_jwt.js')
+const {iKpassportLocal, iKpassportSerializeUser, iKpassportDeserailizeUser} = require('./passport_local.js')
 
 require('dotenv').config()
 const iKuserDb = require('./model.js')
@@ -22,6 +23,7 @@ const {iKcreateJwt} = require('./middleware.js')
 const iKapp = iKexpress()
 iKapp.use( iKmorgan('dev') )
 iKapp.use( iKexpress.urlencoded({extended: true}) )
+iKapp.use( iKexpress.json() )
 require('./database.js')()
 
 
@@ -32,9 +34,36 @@ const iKcorsOptions = {
   }
 iKapp.use( iKcors(iKcorsOptions) )
 
+iKapp.use(iKsession({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true
+    // cookie: { secure: true }
+  }))
+
+
 iKapp.use(iKpassport.initialize());
-iKpassport.use(iKpassportJwt)
-iKpassport.use(iKpassportLocal)
+iKapp.use(iKpassport.session());
+
+// iKpassport.use(iKpassportJwt)
+iKpassport.use(iKpassportLocal);
+// iKapp.use( iKpassportSerializeUser(iKpassport) )
+iKpassport.serializeUser(function(user, done) {
+    console.log(44)
+    console.log(user)
+    done(null, user.id);
+})
+
+// iKapp.use( iKpassportDeserailizeUser(iKpassport) )
+iKpassport.deserializeUser(async function(id, done) {
+    console.log(66)
+    await iKuserDb.findById(id, function(err, user) {
+        console.log(55)
+        console.log(user)
+        return done(err, user);
+    })
+})
+
 
 //routes
 iKapp.get('/', (req, res) => {
@@ -69,10 +98,15 @@ iKapp.get('/api/login', (req, res) => {
     res.send('iK login page')
 })
 
+//iK backup when you are done
+// iKapp.post('/api/login', iKpassport.authenticate('local', { session: false }), (req, res) => {
 
-iKapp.post('/api/login', iKpassport.authenticate('local', { session: false }), (req, res) => {
+iKapp.post('/api/login', iKpassport.authenticate('local'), (req, res) => {
     //req.user is provided by the use of passport.js
     const iKjwtToken = iKcreateJwt( req.user.id )
+    console.log(77)
+    console.log(req.user)
+    console.log(req.isAuthenticated())
 
     res.json({ iKuser: req.user, iKjwtToken })
 })
@@ -83,13 +117,16 @@ iKapp.post('/api/logout', (req, res) => {
 })
 
 
-iKapp.get('/api/authpage', iKpassport.authenticate('jwt', { session: false }), (req, res) => {
+iKapp.get('/api/authpage', (req, res) => {
+    console.log(88)
+    console.log(req.user)
+    console.log(req.isAuthenticated())
     res.send('iK auth page')
 })
 
 
 const iKport = process.env.PORT || 4000;
-iKapp.listen(iKport, () => console.log( 'iK server connection successfuly' ))
+iKapp.listen(iKport, () => console.log( `iK server connection successfuly ${iKport}` ))
 
 
 
