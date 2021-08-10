@@ -8,6 +8,8 @@ const iKexpress = require('express')
 const iKmorgan = require('morgan')
 const iKcors = require('cors')
 const iKsession = require('express-session')
+const iKmongoStore = require('connect-mongo');
+
 
 const iKpassport = require('passport')
 // const {iKpassportJwt} = require('./passport_jwt.js')
@@ -24,7 +26,7 @@ const iKapp = iKexpress()
 iKapp.use( iKmorgan('dev') )
 iKapp.use( iKexpress.urlencoded({extended: true}) )
 iKapp.use( iKexpress.json() )
-require('./database.js')()
+// require('./database.js')()
 
 
 //whtielist
@@ -38,7 +40,16 @@ iKapp.use(iKsession({
     secret: 'keyboard cat',
     resave: false,
     saveUninitialized: true
-    // cookie: { secure: true }
+    // cookie: { secure: true },
+    ,store: iKmongoStore.create({ 
+        mongoUrl: process.env.IKMONGODBURI,
+        mongooseConnection: require('./database.js')(), // mongoose app connection too
+        connection: 'sessions'
+    })
+    , cookie: {
+        maxAge: 1000 * 60 * 60 * 24,
+        httpOnly: false
+    }
   }))
 
 
@@ -105,10 +116,11 @@ iKapp.post('/api/login', iKpassport.authenticate('local'), (req, res) => {
     //req.user is provided by the use of passport.js
     const iKjwtToken = iKcreateJwt( req.user.id )
     console.log(77)
+    console.log(req.session)
     console.log(req.user)
     console.log(req.isAuthenticated())
 
-    res.json({ iKuser: req.user, iKjwtToken })
+    res.json({ iKuser: req.user, iKjwtToken, iKcookie: req.session })
 })
 
 
@@ -119,6 +131,7 @@ iKapp.post('/api/logout', (req, res) => {
 
 iKapp.get('/api/authpage', (req, res) => {
     console.log(88)
+    console.log(req.session)
     console.log(req.user)
     console.log(req.isAuthenticated())
     res.send('iK auth page')
