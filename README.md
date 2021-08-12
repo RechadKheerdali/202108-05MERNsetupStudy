@@ -14,3 +14,14 @@ Authentication app too, with the use of passport-jwt and passport-local.
 - which will authenticate jwt for all protected routes
 - will also authenticate username/email and password for /login route and return jwt token
 However there are still things left to do such as comparing password and logout logic
+
+# 04usingPassportLocalWithSession
+Passport-local using serializing and deserializing for express-session
+- This is really for SSR. However I did try doing CSR but not success but perhaps it could work if it was on the same domain?
+- iK all works fine for SSR
+
+# 05passportLocalSessionWithConnect-MongoForPersistenceCookie
+Passport-local with the using of Connect-Mongo as persistent cookie
+- It works fine, I think. However it saves session collection on the db but it is separate from the user collection. Is it suppose to be like that
+I tried connecting session and user collection together but no success
+- I was mostly focusing on the /login route
