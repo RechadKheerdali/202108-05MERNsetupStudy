@@ -1,6 +1,7 @@
 const iKexpress = require('express')
 const iKmorgan = require('morgan')
-// const iKpassport = require('passport')
+const iKpassport = require('passport')
+const {iKgooglePassport} = require('./passportGoogle.js')
 const iKcors = require('cors')
 
 
@@ -11,6 +12,8 @@ iKapp.use( iKmorgan('dev') )
 iKapp.use( iKexpress.urlencoded({extended: true}) )
 require('./database.js')()
 
+iKapp.use(iKpassport.initialize());
+iKgooglePassport(iKpassport)
 
 //whtielist
 const iKcorsOptions = {
@@ -46,13 +49,23 @@ iKapp.post('/api/login', (req, res) => {
 })
 
 
-iKapp.post('/api/logout', (req, res) => {
-    res.send( req.body )
+iKapp.get('/api/google', iKpassport.authenticate('google', { scope: ['profile'], session: false }), (req, res) => {
+    res.send('iK google login page')
+})
+
+
+iKapp.get('/api/google/redirect', iKpassport.authenticate('google', {session: false}), (req, res) => {
+    res.send('iK google redirect callback')
 })
 
 
 iKapp.get('/api/authpage', (req, res) => {
     res.send('iK auth page')
+})
+
+
+iKapp.post('/api/logout', (req, res) => {
+    res.send( req.body )
 })
 
 const iKport = process.env.PORT || 4000;
