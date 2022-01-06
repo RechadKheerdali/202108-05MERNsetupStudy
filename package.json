@@ -4,6 +4,7 @@
   "description": "express practice",
   "main": "index.js",
   "scripts": {
+    "ikupdate": "npm i && npm update && npm audit fix",
     "test": "echo \"Error: no test specified\" && exit 1",
     "node1": "nodemon ik1.js",
     "node2": "nodemon ik2.js",
@@ -31,9 +32,9 @@
     "express": "^4.17.1",
     "express-session": "^1.17.2",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.13.3",
+    "mongoose": "^6.1.5",
     "morgan": "^1.10.0",
-    "passport": "^0.4.1",
+    "passport": "^0.5.2",
     "passport-local": "^1.0.0",
     "pug": "^3.0.2",
     "uuid": "^8.3.2"
